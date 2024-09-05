@@ -88,13 +88,25 @@ public_users.get("/author/:author", function (req, res) {
   filtered_by_author_promise.then(() => console.log("Promise to get book details based on author has been resolved"));
 });
 
-// Get all books based on title
+// // Get all books based on title
+// public_users.get("/title/:title", function (req, res) {
+//   const title = req.params.title;
+//   let filtered_by_title = Object.values(books).filter(
+//     (book) => book.title === title
+//   );
+//   res.send(filtered_by_title);
+// });
+
+// Get all books based on title asynchronously (Task 13)
 public_users.get("/title/:title", function (req, res) {
   const title = req.params.title;
-  let filtered_by_title = Object.values(books).filter(
-    (book) => book.title === title
-  );
-  res.send(filtered_by_title);
+  let filtered_by_title_promise = new Promise((resolve,reject) => {
+    let filtered_by_title = Object.values(books).filter(
+      (book) => book.title === title
+    );
+    resolve(res.send(filtered_by_title));
+  });
+  filtered_by_title_promise.then(() => console.log("Promise to get book details based on title has been resolved"));
 });
 
 // //  Get book review
@@ -104,7 +116,7 @@ public_users.get("/title/:title", function (req, res) {
 //   res.send(book.reviews);
 // });
 
-//  Get book review
+//  Get book review asynchronously
 public_users.get("/review/:isbn", function (req, res) {
   const isbn = req.params.isbn;
   book = books[isbn];

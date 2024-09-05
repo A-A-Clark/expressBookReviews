@@ -70,7 +70,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   // Add/update new review
   if (review) {
     book.reviews[username] = review;
-    res.send(book.reviews);
+    res.send(`The review for the book with ISBN ${isbn} has been added/updated.`);
   } else {
     res.send("No review to send!");
   }
@@ -86,7 +86,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
 
   if (book.reviews.hasOwnProperty(username)) {
     delete book.reviews[username];
-    res.send(`Review by ${username} has been deleted.`);
+    res.send(`Review for the book with ISBN ${isbn} by ${username} has been deleted.`);
   } else {
     res.send(`${username} hasn't left a review.`);
   }
