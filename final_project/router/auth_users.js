@@ -15,7 +15,7 @@ const authenticatedUser = (username, password) => {
   let validusers = users.filter((user) => {
     return user.username === username && user.password === password;
   });
-  
+
   // Return true if any valid user is found, otherwise false
   if (validusers.length > 0) {
     return true;
@@ -59,8 +59,37 @@ regd_users.post("/login", (req, res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({ message: "Yet to be implemented" });
+  // Get required details
+  const isbn = req.params.isbn;
+  const username = req.session.authorization.username;
+  const review = req.body.review;
+
+  // Get book object by ISBN number
+  book = books[isbn];
+
+  // Add/update new review
+  if (review) {
+    book.reviews[username] = review;
+    res.send(book.reviews);
+  } else {
+    res.send("No review to send!");
+  }
+});
+
+// Delete a review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const isbn = req.params.isbn;
+  const username = req.session.authorization.username;
+
+  // Get book object by ISBN number
+  book = books[isbn];
+
+  if (book.reviews.hasOwnProperty(username)) {
+    delete book.reviews[username];
+    res.send(`Review by ${username} has been deleted.`);
+  } else {
+    res.send(`${username} hasn't left a review.`);
+  }
 });
 
 module.exports.authenticated = regd_users;
